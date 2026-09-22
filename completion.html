@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Completed - Assessment Portal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        .cert-container {
+            border: 10px solid #0d6efd;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            background: #fff;
+            max-width: 800px;
+            margin: 40px auto;
+        }
+        .cert-title {
+            font-size: 3rem;
+            color: #0d6efd;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .cert-subtitle {
+            font-size: 1.5rem;
+            color: #6c757d;
+            margin-bottom: 30px;
+        }
+        .cert-name {
+            font-size: 2.5rem;
+            color: #212529;
+            border-bottom: 2px solid #212529;
+            display: inline-block;
+            padding-bottom: 5px;
+            margin-bottom: 30px;
+            min-width: 400px;
+        }
+        .cert-body {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            .cert-container {
+                border-color: #000;
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+    <div class="container mt-4 no-print text-center">
+        <a href="dashboard.html" class="btn btn-outline-secondary me-2">Back to Dashboard</a>
+        <button class="btn btn-primary" onclick="window.print()"><i class="bi bi-printer"></i> Print Certificate</button>
+    </div>
+
+    <div class="cert-container shadow">
+        <div class="cert-title">CERTIFICATE</div>
+        <div class="cert-subtitle">OF COMPLETION</div>
+        <div class="cert-body">This is to certify that</div>
+        <div class="cert-name" id="certStudentName">Student Name</div>
+        <div class="cert-body">Roll Number: <strong id="certRollNum"></strong></div>
+        <div class="cert-body px-5">
+            Has successfully completed the <strong>Frontend Development Assessment</strong> program, including all technical assessments and practical evaluations for HTML, CSS, Bootstrap, JavaScript, and jQuery.
+        </div>
+        
+        <div class="row mt-5 pt-4">
+            <div class="col-6">
+                <div class="border-top border-dark d-inline-block pt-2 px-4">
+                    Course Director
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="border-top border-dark d-inline-block pt-2 px-4">
+                    Date: <span id="certDate"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = checkAuth();
+            if (!user) return;
+            
+            const progress = StorageUtils.getProgress(user.rollNumber);
+            if (!progress || !progress.courseCompleted) {
+                alert("You have not completed the course yet.");
+                window.location.href = 'dashboard.html';
+                return;
+            }
+            
+            document.getElementById('certStudentName').textContent = user.name;
+            document.getElementById('certRollNum').textContent = user.rollNumber;
+            
+            const d = new Date();
+            document.getElementById('certDate').textContent = d.toLocaleDateString();
+        });
+    </script>
+</body>
+</html>

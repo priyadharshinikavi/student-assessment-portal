@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trainer Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="#">Trainer Dashboard</a>
+            <a href="login.html" class="btn btn-outline-light btn-sm">Student Login</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h4>Student Progress Overview</h4>
+        <div class="card shadow-sm mt-3">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Roll</th>
+                                <th>Name</th>
+                                <th>HTML</th>
+                                <th>CSS</th>
+                                <th>Bootstrap</th>
+                                <th>JavaScript</th>
+                                <th>jQuery</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="trainerTableBody">
+                            <!-- Injected here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="mt-3">
+            <button class="btn btn-danger btn-sm" onclick="clearAllData()">Clear All LocalStorage Data</button>
+        </div>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tbody = document.getElementById('trainerTableBody');
+            
+            for (let i = 101; i <= 130; i++) {
+                const progress = StorageUtils.getProgress(i);
+                if (progress) {
+                    const row = document.createElement('tr');
+                    
+                    const getBadge = (subj) => {
+                        if (subj.status === 'passed' && subj.practical === 'completed') return '<span class="badge bg-success">Done</span>';
+                        if (subj.status === 'passed') return '<span class="badge bg-primary">Test Passed</span>';
+                        if (subj.status === 'unlocked') return '<span class="badge bg-warning text-dark">In Progress</span>';
+                        return '<span class="badge bg-secondary">Locked</span>';
+                    };
+                    
+                    row.innerHTML = `
+                        <td>${progress.rollNumber}</td>
+                        <td>${progress.name || 'Student '+i}</td>
+                        <td>${getBadge(progress.subjects.html)}</td>
+                        <td>${getBadge(progress.subjects.css)}</td>
+                        <td>${getBadge(progress.subjects.bootstrap)}</td>
+                        <td>${getBadge(progress.subjects.javascript)}</td>
+                        <td>${getBadge(progress.subjects.jquery)}</td>
+                        <td>${progress.courseCompleted ? '<span class="badge bg-success fw-bold">COMPLETED</span>' : '<span class="badge bg-secondary">INCOMPLETE</span>'}</td>
+                    `;
+                    tbody.appendChild(row);
+                }
+            }
+            
+            if (tbody.children.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-muted">No student data found in LocalStorage.</td></tr>';
+            }
+        });
+
+        function clearAllData() {
+            if(confirm('Are you sure? This will wipe all student progress!')) {
+                localStorage.clear();
+                sessionStorage.clear();
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>
