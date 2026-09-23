@@ -105,7 +105,18 @@ function initTestSetup() {
     });
 
     document.getElementById('btnMarkReview').addEventListener('click', () => {
-        states[currentQuestionIndex] = states[currentQuestionIndex] === 'marked' ? 'visited' : 'marked';
+        const markBtn = document.getElementById('btnMarkReview');
+        if (states[currentQuestionIndex] === 'marked') {
+            states[currentQuestionIndex] = 'visited';
+            markBtn.textContent = 'Mark for Review';
+            markBtn.classList.replace('btn-warning', 'btn-outline-warning');
+            markBtn.classList.remove('text-dark');
+        } else {
+            states[currentQuestionIndex] = 'marked';
+            markBtn.textContent = 'Unmark';
+            markBtn.classList.replace('btn-outline-warning', 'btn-warning');
+            markBtn.classList.add('text-dark');
+        }
         saveCurrentAnswer(); // this triggers state save
         renderPalette();
     });
@@ -270,6 +281,17 @@ function showQuestion(index) {
     // Button states
     document.getElementById('btnPrev').disabled = (index === 0);
     document.getElementById('btnNext').textContent = (index === TOTAL_QUESTIONS - 1) ? 'Save' : 'Save & Next';
+    
+    const markBtn = document.getElementById('btnMarkReview');
+    if (states[index] === 'marked') {
+        markBtn.textContent = 'Unmark';
+        markBtn.classList.remove('btn-outline-warning');
+        markBtn.classList.add('btn-warning', 'text-dark');
+    } else {
+        markBtn.textContent = 'Mark for Review';
+        markBtn.classList.remove('btn-warning', 'text-dark');
+        markBtn.classList.add('btn-outline-warning');
+    }
     
     renderPalette();
     saveSession();
