@@ -244,7 +244,9 @@ function showQuestion(index) {
     const q = questions[index];
     document.getElementById('currentQNum').textContent = index + 1;
     
-    let html = `<div class="fw-bold mb-3">${q.question}</div>`;
+    // Escape HTML tags in question text to prevent them from rendering as hidden elements
+    const escapedQuestion = q.question.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    let html = `<div class="fw-bold mb-3">${escapedQuestion}</div>`;
     
     if (q.codeSnippet) {
         // Simple HTML escaping for display
