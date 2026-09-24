@@ -53,38 +53,39 @@ function setupTabMonitoring() {
     });
 }
 
-function handleInfraction(eventType, description) {
+async function handleInfraction(eventType, description) {
     if (isSubmitting) return;
 
-    // Stop timer and webcam
-    if (typeof submitTest === 'function') {
-        submitTest(true); // auto-submit test as fail/incomplete
-    }
+    // We must log the event and send email BEFORE we call submitTest, 
+    // because submitTest redirects the page away and kills network requests!
+    
+    // Stop webcam immediately
     stopWebcam();
     
     alert(`SECURITY ALERT: ${eventType}. Your test has been submitted and the admin has been notified.`);
 
-    // Send data to Firebase
-    if (typeof logProctorEvent === 'function' && currentUser) {
-        logProctorEvent(currentUser.rollNumber, currentUser.name, eventType, description);
-    }
+    const logPromise = (typeof logProctorEvent === 'function' && currentUser) 
+        ? logProctorEvent(currentUser.rollNumber, currentUser.name, eventType, description) 
+        : Promise.resolve();
 
-    // Send Email via EmailJS
+    let emailPromise = Promise.resolve();
     if (typeof emailjs !== 'undefined' && currentUser) {
         const templateParams = {
-            admin_email: "priya@example.com", // Replace if needed in EmailJS template
+            admin_email: "priya@example.com", 
             student_name: currentUser.name,
             roll_number: currentUser.rollNumber,
             event_type: eventType,
             description: description,
             time: new Date().toLocaleString()
         };
+        emailPromise = emailjs.send(emailjsConfig.serviceId, emailjsConfig.templateId, templateParams).catch(e => console.error("EmailJS failed", e));
+    }
 
-        emailjs.send(emailjsConfig.serviceId, emailjsConfig.templateId, templateParams)
-            .then(() => {
-                console.log("Admin email sent successfully.");
-            }, (error) => {
-                console.error("Failed to send email.", error);
-            });
+    // Wait for network requests to finish
+    await Promise.all([logPromise, emailPromise]);
+
+    // Finally submit the test which redirects
+    if (typeof submitTest === 'function') {
+        submitTest(true); 
     }
 }

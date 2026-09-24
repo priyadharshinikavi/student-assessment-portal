@@ -322,7 +322,7 @@ function prepareSubmit() {
     submitModal.show();
 }
 
-function submitTest(isAutoSubmit = false) {
+async function submitTest(isAutoSubmit = false) {
     if (isSubmitting) return; // Prevent double submission
     isSubmitting = true;
     
@@ -376,9 +376,13 @@ function submitTest(isAutoSubmit = false) {
     
     StorageUtils.saveProgress(currentUser.rollNumber, progress);
     
-    // Save to Firebase Admin Dashboard
+    // Save to Firebase Admin Dashboard and wait for it
     if (typeof saveScoreToFirebase === 'function') {
-        saveScoreToFirebase(currentUser.rollNumber, currentUser.name, currentSubject, correctCount, percentage, status);
+        try {
+            await saveScoreToFirebase(currentUser.rollNumber, currentUser.name, currentSubject, correctCount, percentage, status);
+        } catch (e) {
+            console.error(e);
+        }
     }
     
     // Save evaluation result payload specifically for result page
