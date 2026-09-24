@@ -72,6 +72,7 @@ function initTestSetup() {
             startTimer(session.remainingSeconds);
             renderPalette();
             showQuestion(currentQuestionIndex);
+            if (typeof initProctoring === 'function') initProctoring();
         });
     } else {
         // New session, show instructions
@@ -84,6 +85,7 @@ function initTestSetup() {
                 startTimer();
                 renderPalette();
                 showQuestion(0);
+                if (typeof initProctoring === 'function') initProctoring();
             });
         });
     }
@@ -123,20 +125,6 @@ function initTestSetup() {
 
     document.getElementById('btnSubmitTest').addEventListener('click', prepareSubmit);
     document.getElementById('confirmSubmitBtn').addEventListener('click', submitTest);
-    
-    // Strict Anti-Cheat: If user leaves page or switches tabs, auto-submit
-    document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'hidden' && timer && !isSubmitting) {
-            alert("You left the test window! The assessment will now be submitted.");
-            submitTest(true);
-        }
-    });
-
-    window.addEventListener('pagehide', () => {
-        if (timer && !isSubmitting) {
-            submitTest(true);
-        }
-    });
 }
 
 function loadQuestions(setNum, callback) {
@@ -387,6 +375,11 @@ function submitTest(isAutoSubmit = false) {
     }
     
     StorageUtils.saveProgress(currentUser.rollNumber, progress);
+    
+    // Save to Firebase Admin Dashboard
+    if (typeof saveScoreToFirebase === 'function') {
+        saveScoreToFirebase(currentUser.rollNumber, currentUser.name, currentSubject, correctCount, percentage, status);
+    }
     
     // Save evaluation result payload specifically for result page
     const resultPayload = {
