@@ -67,12 +67,15 @@ function initTestSetup() {
         states = session.states || {};
         currentQuestionIndex = session.currentIndex || 0;
         
-        loadQuestions(currentUser.assignedSet, () => {
+        loadQuestions(currentUser.assignedSet, async () => {
+            if (typeof initProctoring === 'function') {
+                const isReady = await initProctoring();
+                if (!isReady) return; // Stop initialization
+            }
             document.getElementById('mainTestUI').style.display = 'block';
             startTimer(session.remainingSeconds);
             renderPalette();
             showQuestion(currentQuestionIndex);
-            if (typeof initProctoring === 'function') initProctoring();
         });
     } else {
         // New session, show instructions
@@ -80,12 +83,15 @@ function initTestSetup() {
         
         document.getElementById('btnStartTest').addEventListener('click', () => {
             introModal.hide();
-            loadQuestions(currentUser.assignedSet, () => {
+            loadQuestions(currentUser.assignedSet, async () => {
+                if (typeof initProctoring === 'function') {
+                    const isReady = await initProctoring();
+                    if (!isReady) return; // Stop initialization
+                }
                 document.getElementById('mainTestUI').style.display = 'block';
                 startTimer();
                 renderPalette();
                 showQuestion(0);
-                if (typeof initProctoring === 'function') initProctoring();
             });
         });
     }

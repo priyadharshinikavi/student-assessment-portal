@@ -17,9 +17,12 @@ async function initProctoring() {
     if (typeof emailjs !== 'undefined') {
         emailjs.init(emailjsConfig.publicKey);
     }
-    await startWebcam();
+    const camSuccess = await startWebcam();
+    if (!camSuccess) return false;
+    
     setupTabMonitoring();
     loadAIModel();
+    return true;
 }
 
 async function loadAIModel() {
@@ -86,7 +89,7 @@ function startAIAnalysis() {
 
 async function startWebcam() {
     const video = document.getElementById('webcamVideo');
-    if (!video) return;
+    if (!video) return false;
 
     try {
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -102,12 +105,13 @@ async function startWebcam() {
                 handleInfraction("Camera Interrupted", "Webcam hardware was unplugged or disabled mid-test.");
             }
         };
+        return true;
 
     } catch (err) {
         console.error("Webcam access denied or unavailable: ", err);
-        // If camera fails on initial load, do not record a 0% fail. Just kick them out.
-        alert("CRITICAL ERROR: A working webcam is required to take this assessment. Please connect a camera, grant browser permissions, and try again.");
+        alert("Camera access is missing or camera is not accessible. The test cannot start.");
         window.location.href = "dashboard.html";
+        return false;
     }
 }
 
