@@ -14,7 +14,24 @@ let isSubmitting = false;
 const TOTAL_QUESTIONS = 50;
 const TEST_DURATION_MINS = 60;
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    // PRE-FLIGHT HARDWARE CHECK
+    let hasCamera = false;
+    try {
+        if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            hasCamera = devices.some(device => device.kind === 'videoinput');
+        }
+    } catch (err) {
+        console.error("Error enumerating devices:", err);
+    }
+    
+    if (!hasCamera) {
+        alert("CRITICAL HARDWARE ERROR: No camera device was found on this computer. You cannot proceed with the assessment.");
+        window.location.href = "dashboard.html";
+        return; // Stop execution
+    }
+
     currentUser = checkAuth();
     if (!currentUser) return;
 
