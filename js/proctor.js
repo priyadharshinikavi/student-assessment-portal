@@ -89,6 +89,9 @@ async function startWebcam() {
     if (!video) return;
 
     try {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            throw new Error("Camera API not supported.");
+        }
         stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
         video.srcObject = stream;
         proctorActive = true;
@@ -101,8 +104,10 @@ async function startWebcam() {
         };
 
     } catch (err) {
-        console.error("Webcam access denied: ", err);
-        handleInfraction("Webcam Disabled", "Student denied or disabled webcam access.");
+        console.error("Webcam access denied or unavailable: ", err);
+        // If camera fails on initial load, do not record a 0% fail. Just kick them out.
+        alert("CRITICAL ERROR: A working webcam is required to take this assessment. Please connect a camera, grant browser permissions, and try again.");
+        window.location.href = "dashboard.html";
     }
 }
 
