@@ -15,7 +15,32 @@ const TOTAL_QUESTIONS = 50;
 const TEST_DURATION_MINS = 60;
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // PRE-FLIGHT HARDWARE CHECK
+    // PRE-FLIGHT HARDWARE & SOFTWARE CHECKS
+    
+    // 1. Check OS (Must be Windows)
+    const isWindows = navigator.userAgent.toLowerCase().includes('windows');
+    if (!isWindows) {
+        alert("SYSTEM REQUIREMENT FAILED: This assessment requires a Windows PC. Please log in from a Windows device to continue.");
+        window.location.href = "dashboard.html";
+        return;
+    }
+
+    // 2. Check Internet Connection
+    if (!navigator.onLine) {
+        alert("NETWORK ERROR: No internet connection detected. Please connect to the internet to take this test.");
+        window.location.href = "dashboard.html";
+        return;
+    }
+    
+    if (navigator.connection && navigator.connection.downlink) {
+        if (navigator.connection.downlink < 0.5) { // less than 0.5 Mbps
+            alert("NETWORK ERROR: Your internet connection is too slow. A stable broadband connection is required.");
+            window.location.href = "dashboard.html";
+            return;
+        }
+    }
+
+    // 3. Check Camera Hardware
     let hasCamera = false;
     try {
         if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
