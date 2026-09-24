@@ -135,8 +135,11 @@
                         <div class="card-header bg-danger text-white fw-bold">
                             <i class="bi bi-camera-video-fill"></i> Proctoring Active
                         </div>
-                        <div class="card-body p-0 text-center bg-dark">
+                        <div class="card-body p-0 text-center bg-dark position-relative">
                             <video id="webcamVideo" autoplay muted style="width: 100%; max-height: 150px; object-fit: cover;"></video>
+                            <div id="aiStatus" class="position-absolute bottom-0 start-0 w-100 bg-warning text-dark small fw-bold py-1">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading AI Model...
+                            </div>
                         </div>
                     </div>
 
@@ -199,6 +202,10 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     
+    <!-- TensorFlow.js AI Proctoring -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd"></script>
+    
     <!-- Load Question Data -->
     <script src="data/htmlQuestions.js"></script>
     <script src="data/cssQuestions.js"></script>
@@ -207,10 +214,10 @@
     <script src="data/jqueryQuestions.js"></script>
     
     <script src="js/storage.js"></script>
-    <script src="js/firebase-config.js?v=2"></script>
-    <script src="js/app.js?v=10"></script>
+    <script src="js/firebase-config.js?v=3"></script>
+    <script src="js/app.js?v=11"></script>
     <script src="js/timer.js"></script>
-    <script src="js/test.js?v=10"></script>
-    <script src="js/proctor.js?v=10"></script>
+    <script src="js/test.js?v=11"></script>
+    <script src="js/proctor.js?v=11"></script>
 </body>
 </html>
