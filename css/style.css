@@ -29,3 +29,41 @@ body {
     -ms-user-select: none;
     user-select: none;
 }
+
+/* Responsive Design Overrides */
+@media (max-width: 767.98px) {
+    body {
+        font-size: 14px;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .navbar-brand {
+        font-size: 1.1rem;
+    }
+    
+    .container, .container-fluid {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    
+    /* Make typography scale down on mobile */
+    h1, .h1 { font-size: 1.75rem; }
+    h2, .h2 { font-size: 1.5rem; }
+    h3, .h3 { font-size: 1.3rem; }
+    h4, .h4 { font-size: 1.1rem; }
+    h5, .h5 { font-size: 1rem; }
+    
+    /* Stack elements tighter on mobile */
+    .mb-4 {
+        margin-bottom: 1rem !important;
+    }
+    
+    /* Ensure tables can scroll horizontally on small screens */
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
