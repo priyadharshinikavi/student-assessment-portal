@@ -135,6 +135,21 @@ function setupTabMonitoring() {
             handleInfraction("Page Closed", "Student closed or refreshed the page.");
         }
     });
+
+    document.addEventListener('fullscreenchange', () => {
+        if (!document.fullscreenElement && proctorActive && !isSubmitting) {
+            handleInfraction("Fullscreen Exited", "Student exited full screen mode.");
+        }
+    });
+
+    window.addEventListener('resize', () => {
+        if (proctorActive && !isSubmitting) {
+            // Check if window is significantly smaller than screen (split screen detection)
+            if (window.innerWidth < window.screen.width * 0.9 || window.innerHeight < window.screen.height * 0.9) {
+                handleInfraction("Split Screen Detected", "Student attempted to use split screen or resized the window.");
+            }
+        }
+    });
 }
 
 async function handleInfraction(eventType, description) {

@@ -104,26 +104,44 @@ function initTestSetup() {
     const session = StorageUtils.getTestSession(currentUser.rollNumber, currentSubject);
     
     if (session) {
-        // Resume session quietly without modal
+        // Resume session
         answers = session.answers || {};
         states = session.states || {};
         currentQuestionIndex = session.currentIndex || 0;
         
-        loadQuestions(currentUser.assignedSet, async () => {
-            if (typeof initProctoring === 'function') {
-                const isReady = await initProctoring();
-                if (!isReady) return; // Stop initialization
+        document.getElementById('btnStartTest').textContent = 'RESUME TEST';
+        introModal.show();
+        
+        document.getElementById('btnStartTest').addEventListener('click', () => {
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log("Error enabling fullscreen:", err);
+                });
             }
-            document.getElementById('mainTestUI').style.display = 'block';
-            startTimer(session.remainingSeconds);
-            renderPalette();
-            showQuestion(currentQuestionIndex);
+            
+            introModal.hide();
+            loadQuestions(currentUser.assignedSet, async () => {
+                if (typeof initProctoring === 'function') {
+                    const isReady = await initProctoring();
+                    if (!isReady) return;
+                }
+                document.getElementById('mainTestUI').style.display = 'block';
+                startTimer(session.remainingSeconds);
+                renderPalette();
+                showQuestion(currentQuestionIndex);
+            });
         });
     } else {
         // New session, show instructions
         introModal.show();
         
         document.getElementById('btnStartTest').addEventListener('click', () => {
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log("Error enabling fullscreen:", err);
+                });
+            }
+            
             introModal.hide();
             loadQuestions(currentUser.assignedSet, async () => {
                 if (typeof initProctoring === 'function') {

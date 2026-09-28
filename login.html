@@ -42,11 +42,26 @@
                     <div id="loginError" class="text-danger mt-2 small" style="display: none;"></div>
                 </div>
                 
-                <button type="submit" class="btn btn-primary w-100 py-2">Login</button>
+                <button type="submit" class="btn btn-primary w-100 py-2 mb-3">Student Login</button>
+                
+                <div class="text-center mt-2 border-top pt-3">
+                    <button type="button" class="btn btn-outline-danger w-100 py-2" onclick="promptAdminLogin()">Admin Login</button>
+                </div>
             </form>
         </div>
     </div>
 
+    <script>
+        function promptAdminLogin() {
+            const pass = prompt('Enter Admin Password:');
+            if (pass === 'admin123' || pass === 'admin 123') {
+                sessionStorage.setItem('adminAuth', 'true');
+                window.location.href = 'admin.html';
+            } else if (pass !== null) {
+                alert('Incorrect Password!');
+            }
+        }
+    </script>
     <script src="js/storage.js"></script>
     <script src="js/app.js"></script>
     <script src="js/auth.js"></script>
