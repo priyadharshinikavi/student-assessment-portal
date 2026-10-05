@@ -7,6 +7,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css?v=2">
     <style>
+        body {
+            background: url('assets/education_bg.png') no-repeat center center fixed;
+            background-size: cover;
+            background-color: #f4f6f9; /* fallback */
+        }
         .login-container {
             min-height: 100vh;
             display: flex;
@@ -16,6 +21,11 @@
         .login-card {
             max-width: 450px;
             width: 100%;
+            background: rgba(255, 255, 255, 0.95); /* Slight transparency for effect */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.4);
         }
     </style>
 </head>
