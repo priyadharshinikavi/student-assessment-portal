@@ -33,16 +33,28 @@
                     <input type="text" class="form-control" id="studentName" required placeholder="Enter your full name">
                 </div>
                 
+                <div class="mb-3">
+                    <label for="course" class="form-label">Course / Track</label>
+                    <select class="form-select" id="course" required>
+                        <option value="">Select Course</option>
+                        <option value="frontend">Frontend Developer</option>
+                        <option value="data_analyst">Data Analyst</option>
+                    </select>
+                </div>
+                
                 <div class="mb-4">
                     <label for="rollNumber" class="form-label">Roll Number</label>
-                    <select class="form-select" id="rollNumber" required>
-                        <option value="">Select Roll Number</option>
+                    <select class="form-select" id="rollNumber" required disabled>
+                        <option value="">Select Course First</option>
                         <!-- Options generated via JS -->
                     </select>
                     <div id="loginError" class="text-danger mt-2 small" style="display: none;"></div>
                 </div>
                 
                 <button type="submit" class="btn btn-primary w-100 py-2">Login</button>
+                <div class="text-center mt-3">
+                    <a href="admin.html" class="text-muted small text-decoration-none">Admin Dashboard</a>
+                </div>
             </form>
         </div>
     </div>

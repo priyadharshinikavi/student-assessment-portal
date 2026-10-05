@@ -48,18 +48,32 @@ const StorageUtils = {
     },
 
     // Default progress structure
-    getInitialProgress: function(rollNumber) {
-        const setNum = ((parseInt(rollNumber) - 101) % 10) + 1;
-        return {
-            rollNumber: rollNumber,
-            assignedSet: setNum,
-            subjects: {
+    getInitialProgress: function(rollNumber, course = 'frontend') {
+        let setNum = 1;
+        let subjects = {};
+        
+        if (course === 'frontend') {
+            setNum = ((parseInt(rollNumber) - 101) % 10) + 1;
+            subjects = {
                 html: { status: 'unlocked', score: 0, percentage: 0, practical: 'locked' },
                 css: { status: 'locked', score: 0, percentage: 0, practical: 'locked' },
                 bootstrap: { status: 'locked', score: 0, percentage: 0, practical: 'locked' },
                 javascript: { status: 'locked', score: 0, percentage: 0, practical: 'locked' },
                 jquery: { status: 'locked', score: 0, percentage: 0, practical: 'locked' }
-            },
+            };
+        } else if (course === 'data_analyst') {
+            setNum = parseInt(rollNumber); // 1 to 20
+            subjects = {
+                numpy: { status: 'unlocked', score: 0, percentage: 0, practical: 'locked' },
+                pandas: { status: 'locked', score: 0, percentage: 0, practical: 'locked' }
+            };
+        }
+
+        return {
+            rollNumber: rollNumber,
+            course: course,
+            assignedSet: setNum,
+            subjects: subjects,
             courseCompleted: false
         };
     }

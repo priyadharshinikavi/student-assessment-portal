@@ -125,6 +125,10 @@ function initTestSetup() {
         
         document.getElementById('btnStartTest').addEventListener('click', () => {
             introModal.hide();
+            // Request full screen
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) elem.requestFullscreen().catch(e => console.log(e));
+            else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
             loadQuestions(currentUser.assignedSet, async () => {
                 if (typeof initProctoring === 'function') {
                     const isReady = await initProctoring();
@@ -137,6 +141,14 @@ function initTestSetup() {
             });
         });
     }
+
+    // Fullscreen exit detection
+    document.addEventListener('fullscreenchange', () => {
+        if (!document.fullscreenElement && document.getElementById('mainTestUI').style.display === 'block' && !isSubmitting) {
+            alert("Security Violation: You exited full screen mode! Your assessment will now be submitted automatically.");
+            submitTest(true);
+        }
+    });
 
     // Bind navigation buttons
     document.getElementById('btnPrev').addEventListener('click', () => {

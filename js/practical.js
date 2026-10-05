@@ -62,6 +62,39 @@ function initPracticalSetup() {
 
     runPreview();
 
+    // Show Intro Modal
+    const pModal = new bootstrap.Modal(document.getElementById('practicalIntroModal'));
+    pModal.show();
+    
+    document.getElementById('btnStartPractical').addEventListener('click', () => {
+        pModal.hide();
+        document.getElementById('mainPracticalUI').style.display = 'flex';
+        
+        // Fullscreen
+        const elem = document.documentElement;
+        if (elem.requestFullscreen) elem.requestFullscreen().catch(e=>console.log(e));
+        else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+        
+        // Timer
+        const timerDisplay = document.getElementById('practicalTimer');
+        timer = new TestTimer(PRACTICAL_DURATION_MINS, (remaining, display) => {
+            timerDisplay.textContent = display;
+        }, () => {
+            submitModal.hide();
+            alert("Time is up! Submitting task automatically.");
+            submitPractical();
+        });
+        timer.start();
+    });
+
+    // Fullscreen exit detection
+    document.addEventListener('fullscreenchange', () => {
+        if (!document.fullscreenElement && document.getElementById('mainPracticalUI').style.display === 'flex') {
+            alert("Security Violation: You exited full screen mode! Your assessment will now be submitted automatically.");
+            submitPractical();
+        }
+    });
+
     // Event Listeners
     document.getElementById('btnRunCode').addEventListener('click', runPreview);
     
@@ -80,17 +113,6 @@ function initPracticalSetup() {
 
     document.getElementById('btnSubmitPractical').addEventListener('click', () => submitModal.show());
     document.getElementById('confirmSubmitPractical').addEventListener('click', submitPractical);
-
-    // Timer
-    const timerDisplay = document.getElementById('practicalTimer');
-    timer = new TestTimer(PRACTICAL_DURATION_MINS, (remaining, display) => {
-        timerDisplay.textContent = display;
-    }, () => {
-        submitModal.hide();
-        alert("Time is up! Submitting task automatically.");
-        submitPractical();
-    });
-    timer.start();
 }
 
 function renderTaskDetails() {
@@ -136,7 +158,10 @@ function submitPractical() {
     progress.subjects[currentSubject].practical = 'completed';
     
     // Unlock next subject
-    const subjectOrder = ['html', 'css', 'bootstrap', 'javascript', 'jquery'];
+    let subjectOrder = ['html', 'css', 'bootstrap', 'javascript', 'jquery'];
+    if (currentUser.course === 'data_analyst') {
+        subjectOrder = ['numpy', 'pandas'];
+    }
     const currentIndex = subjectOrder.indexOf(currentSubject);
     
     if (currentIndex >= 0 && currentIndex < subjectOrder.length - 1) {

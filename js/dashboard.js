@@ -18,13 +18,22 @@ function renderDashboard(user) {
     const subjectsContainer = document.getElementById('subjectsContainer');
     subjectsContainer.innerHTML = '';
 
-    const subjectConfig = [
-        { id: 'html', title: 'HTML Assessment' },
-        { id: 'css', title: 'CSS Assessment' },
-        { id: 'bootstrap', title: 'Bootstrap Assessment' },
-        { id: 'javascript', title: 'JavaScript Assessment' },
-        { id: 'jquery', title: 'jQuery Assessment' }
-    ];
+    let subjectConfig = [];
+    if (user.course === 'data_analyst') {
+        subjectConfig = [
+            { id: 'numpy', title: 'NumPy Assessment' },
+            { id: 'pandas', title: 'Pandas Assessment' }
+        ];
+    } else {
+        // Default to frontend
+        subjectConfig = [
+            { id: 'html', title: 'HTML Assessment' },
+            { id: 'css', title: 'CSS Assessment' },
+            { id: 'bootstrap', title: 'Bootstrap Assessment' },
+            { id: 'javascript', title: 'JavaScript Assessment' },
+            { id: 'jquery', title: 'jQuery Assessment' }
+        ];
+    }
 
     subjectConfig.forEach(subj => {
         const subjData = progress.subjects[subj.id];

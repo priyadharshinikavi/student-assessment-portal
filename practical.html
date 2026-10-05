@@ -65,7 +65,25 @@
         </div>
     </nav>
 
-    <div class="container-fluid mt-3">
+    <!-- Intro Modal -->
+    <div class="modal fade" id="practicalIntroModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Practical Assessment</h5>
+                </div>
+                <div class="modal-body p-4 text-center">
+                    <p class="mb-4">Click the button below to begin your practical assessment. The test will open in full-screen mode.</p>
+                    <div class="alert alert-warning text-start">
+                        <strong>Important:</strong> Do not exit full-screen mode, or your test will be automatically submitted!
+                    </div>
+                    <button class="btn btn-primary btn-lg px-5 mt-2 fw-bold" id="btnStartPractical">START PRACTICAL</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid mt-3" id="mainPracticalUI" style="display: none;">
         <div class="row">
             <!-- Instructions Panel -->
             <div class="col-lg-3 mb-4">
@@ -171,6 +189,8 @@
     <script src="data/bootstrapPractical.js"></script>
     <script src="data/javascriptPractical.js"></script>
     <script src="data/jqueryPractical.js"></script>
+    <script src="data/numpyPractical.js"></script>
+    <script src="data/pandasPractical.js"></script>
     
     <script src="js/practical.js"></script>
 </body>
