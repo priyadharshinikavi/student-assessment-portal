@@ -33,13 +33,22 @@
             font-size: 0.9rem;
         }
         .option-label {
-            display: block;
+            display: flex;
+            align-items: flex-start;
             padding: 10px 15px;
             border: 1px solid #dee2e6;
             border-radius: 5px;
             margin-bottom: 10px;
             cursor: pointer;
             transition: all 0.2s;
+            word-wrap: break-word;
+            word-break: break-word;
+            white-space: normal;
+            overflow-wrap: break-word;
+        }
+        .option-label .fw-bold {
+            flex-shrink: 0;
+            min-width: 28px;
         }
         .option-label:hover {
             background-color: #e9ecef;
@@ -47,6 +56,20 @@
         .option-input:checked + .option-label {
             background-color: #cfe2ff;
             border-color: #9ec5fe;
+        }
+        #questionContent {
+            word-wrap: break-word;
+            word-break: break-word;
+            white-space: normal;
+            overflow-wrap: break-word;
+        }
+        #questionContent .fw-bold {
+            display: block;
+            word-wrap: break-word;
+            word-break: break-word;
+            white-space: normal;
+            overflow-wrap: break-word;
+            line-height: 1.6;
         }
     </style>
 </head>
